@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1685633852316" clover="3.2.0">
-  <project timestamp="1685633852317" name="All files">
+<coverage generated="1685634228380" clover="3.2.0">
+  <project timestamp="1685634228380" name="All files">
     <metrics statements="7" coveredstatements="7" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1" elements="9" coveredelements="9" complexity="0" loc="7" ncloc="7" packages="1" files="1" classes="1"/>
     <file name="meassing-param-errors.ts" path="/home/mamboo/Documentos/GitHub/Clean-Node-API/src/presentation/errors/meassing-param-errors.ts">
       <metrics statements="7" coveredstatements="7" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
