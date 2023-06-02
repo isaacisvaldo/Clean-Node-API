@@ -1,5 +1,5 @@
 import {HttpRequest,HttpResponse} from '../protocols/http'
-import {MissingParamError} from '../errors/meassing-param-errors'
+import {MissingParamError} from '../errors/messing-param-errors'
 import { badRequest } from '../helpers/http-helper'
 import {Controller} from '../protocols/controller'
 export class SignUpController  implements Controller {
