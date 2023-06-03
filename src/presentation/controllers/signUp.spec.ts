@@ -1,20 +1,32 @@
 import { SignUpController } from './signUp'
-import { MissingParamError ,InvalidParamError,ServerError} from '../errors'
+import { MissingParamError, InvalidParamError, ServerError } from '../errors'
 import { EmailValidator } from '../protocols'
 
 describe('signUp Controller', () => {
-    interface SutTypes{
-        sut:SignUpController,
-        emailValidatorStb:EmailValidator
+    interface SutTypes {
+        sut: SignUpController,
+        emailValidatorStb: EmailValidator
     }
-    const makeSut = (): SutTypes => {
-        class EmailValidatorStub  implements EmailValidator{
+    const makeEmailValidator = (): EmailValidator => {
+        class EmailValidatorStub implements EmailValidator {
             isValid(email: string): boolean {
                 return true;
             }
         }
 
-        const emailValidatorStb = new EmailValidatorStub()
+        return new EmailValidatorStub()
+    }
+    const makeEmailValidatorWitherro = (): EmailValidator => {
+        class EmailValidatorStub implements EmailValidator {
+            isValid(email: string): boolean {
+                throw new  Error()
+            }
+        }
+
+        return new EmailValidatorStub()
+    }
+    const makeSut = (): SutTypes => { 
+        const emailValidatorStb = makeEmailValidator()
         const sut = new SignUpController(emailValidatorStb)
         return {
             sut,
@@ -22,7 +34,7 @@ describe('signUp Controller', () => {
         }
     }
     test('Should return 400 if name is provided', () => {
-        const {sut} = makeSut()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
                 email: 'test@example.com',
@@ -36,7 +48,7 @@ describe('signUp Controller', () => {
         expect(httpResponse.body).toEqual(new MissingParamError('name'))
     })
     test('Should return 400 if email is provided', () => {
-        const {sut} = makeSut()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
                 name: 'Isaac Isvaldo',
@@ -50,7 +62,7 @@ describe('signUp Controller', () => {
         expect(httpResponse.body).toEqual(new MissingParamError('email'))
     })
     test('Should return 400 if password is provided', () => {
-        const {sut} = makeSut()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
                 name: 'Isaac Isvaldo',
@@ -64,7 +76,7 @@ describe('signUp Controller', () => {
         expect(httpResponse.body).toEqual(new MissingParamError('password'))
     })
     test('Should return 400 if password  confirmation is provided', () => {
-        const {sut} = makeSut()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
                 name: 'Isaac Isvaldo',
@@ -78,7 +90,7 @@ describe('signUp Controller', () => {
         expect(httpResponse.body).toEqual(new MissingParamError('password_confirmation'))
     })
     test('Should return 400 if an email invalid is provided', () => {
-        const {sut,emailValidatorStb} = makeSut()
+        const { sut, emailValidatorStb } = makeSut()
         jest.spyOn(emailValidatorStb, 'isValid').mockReturnValueOnce(false)
         const httpRequest = {
             body: {
@@ -92,10 +104,10 @@ describe('signUp Controller', () => {
         const httpResponse = sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual(new InvalidParamError('email'))
-    }) 
+    })
     test('Should  call EmailValidator whit correct email', () => {
-        const {sut,emailValidatorStb} = makeSut()
-     const isValidSpy =   jest.spyOn(emailValidatorStb, 'isValid')
+        const { sut, emailValidatorStb } = makeSut()
+        const isValidSpy = jest.spyOn(emailValidatorStb, 'isValid')
         const httpRequest = {
             body: {
                 name: 'Isaac Isvaldo',
@@ -107,15 +119,15 @@ describe('signUp Controller', () => {
         }
         sut.handle(httpRequest)
         expect(isValidSpy).toHaveBeenCalledWith('example_@example.com')
-    }) 
+    })
     test('Should return 500 if EmailValidator throws', () => {
-        class EmailValidatorStub  implements EmailValidator{
+        class EmailValidatorStub implements EmailValidator {
             isValid(email: string): boolean {
                 throw new Error()
             }
         }
 
-        const emailValidatorStb = new EmailValidatorStub()
+        const emailValidatorStb = makeEmailValidatorWitherro()
         const sut = new SignUpController(emailValidatorStb)
         const httpRequest = {
             body: {
