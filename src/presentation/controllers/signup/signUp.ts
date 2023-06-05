@@ -30,11 +30,15 @@ export class SignUpController implements Controller {
             }
             //Se todos oa dados forem validados 
             //Criar um user 
-            this.addAccount.add({
+           const account= this.addAccount.add({
                 name,
                 email,
                 password
-            })
+              })
+              return {
+                statusCode: 200,
+                body: account
+              }
         } catch (error) {
             
             return serverError()
