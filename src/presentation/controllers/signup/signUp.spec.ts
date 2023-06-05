@@ -1,8 +1,6 @@
 import { SignUpController } from './signUp'
-import { MissingParamError, InvalidParamError, ServerError } from '../errors'
-import { EmailValidator } from '../protocols'
-import {AccountModel} from'../../domain/models/account'
-import {AddAccount,AddAccountModel} from '../../domain/usecases/add-account'
+import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
+import { EmailValidator,AccountModel,AddAccount,AddAccountModel } from './signup-protocols'
 
 describe('signUp Controller', () => {
 
@@ -166,7 +164,7 @@ describe('signUp Controller', () => {
         expect(httpResponse.statusCode).toBe(500)
         expect(httpResponse.body).toEqual(new ServerError())
     })
-    test('Should  call Addaccount with correct values', () => {
+    test('Should  call Account with correct values', () => {
         const { sut, addAccountStub } = makeSut()
         const addSpy = jest.spyOn(addAccountStub, 'add')
         const httpRequest = {
