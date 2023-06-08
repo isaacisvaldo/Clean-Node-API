@@ -1,7 +1,7 @@
 import { SignUpController } from './signUp'
 import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
 import { EmailValidator,AccountModel,AddAccount,AddAccountModel } from './signup-protocols'
-import { promises } from 'dns'
+
 
 
 describe('signUp Controller', () => {
